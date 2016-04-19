@@ -7,5 +7,6 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>settestings</module>
+		<module>tests</module>
 	</modules>
 </project>
