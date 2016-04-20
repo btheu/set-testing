@@ -1,4 +1,4 @@
-package com.github.btheu.settesting.core.impl;
+package com.github.btheu.settesting.core;
 
 public interface GridResultProvider {
 

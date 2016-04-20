@@ -5,6 +5,8 @@ import com.github.btheu.settesting.ResultComparator;
 import com.github.btheu.settesting.TestInput;
 import com.github.btheu.settesting.UseCase;
 import com.github.btheu.settesting.User;
+import com.github.btheu.settesting.core.GridResult;
+import com.github.btheu.settesting.core.GridResultProvider;
 import com.github.btheu.settesting.core.ResultReport;
 
 import lombok.Getter;

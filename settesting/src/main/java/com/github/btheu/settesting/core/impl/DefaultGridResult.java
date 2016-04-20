@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.github.btheu.settesting.Result;
 import com.github.btheu.settesting.TestInput;
+import com.github.btheu.settesting.core.GridResult;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
