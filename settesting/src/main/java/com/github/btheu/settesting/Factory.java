@@ -7,8 +7,8 @@ package com.github.btheu.settesting;
  * @author BTHE
  *
  */
-public interface Factory {
+public interface Factory extends TestInput {
 
-	void inject(Object object);
+    void inject(Object object);
 
 }

@@ -1,5 +1,5 @@
 package com.github.btheu.settesting;
 
-public interface BusinessObject {
+public interface BusinessObject extends TestInput {
 
 }

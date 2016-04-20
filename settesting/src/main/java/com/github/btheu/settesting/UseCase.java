@@ -1,6 +1,6 @@
 package com.github.btheu.settesting;
 
-public interface UseCase {
+public interface UseCase extends TestInput {
 
 	Result execute();
 

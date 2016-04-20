@@ -8,12 +8,12 @@ import com.github.btheu.settesting.Result;
 import lombok.Data;
 
 @Data
-public class MoreThanResult implements Result {
+public class RangeResult implements Result {
 
 	private int currentValue;
 	private int thresholdValue;
 
-	public MoreThanResult(int currentValue) {
+	public RangeResult(int currentValue) {
 		this.currentValue = currentValue;
 	}
 

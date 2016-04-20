@@ -1,6 +1,6 @@
 package com.github.btheu.settesting;
 
-public interface User {
+public interface User extends TestInput {
 
 	void create();
 
