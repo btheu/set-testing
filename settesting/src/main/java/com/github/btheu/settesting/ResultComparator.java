@@ -7,6 +7,7 @@ public interface ResultComparator {
 	
 	void compare(Result result, TestInput...inputs);
 
+	@Deprecated
 	void printReport();
 
 }

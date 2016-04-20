@@ -1,21 +1,30 @@
 package com.github.btheu.settesting;
 
+import java.util.List;
+
 import org.junit.Test;
 
+import com.github.btheu.settesting.core.ReportLine;
+import com.github.btheu.settesting.core.ResultReport;
 import com.github.btheu.settesting.core.impl.DefaultResultComparator;
-import com.github.btheu.settesting.core.impl.GridResultProvider;
 import com.github.btheu.settesting.core.impl.InMemoryGridResultProvider;
-import com.github.btheu.settesting.core.impl.PrimitiveValue;
+import com.github.btheu.settesting.core.impl.InMemoryResultReport;
+import com.github.btheu.settesting.core.impl.PrimitiveValueResult;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ResultComparatorTest {
 
     @Test
     public void test() throws InstantiationException, IllegalAccessException {
         
         DefaultResultComparator comp = new DefaultResultComparator();
-        GridResultProvider gridResultProvider = new InMemoryGridResultProvider();
+        InMemoryGridResultProvider gridResultProvider = new InMemoryGridResultProvider();
+        InMemoryResultReport report = new InMemoryResultReport();
         
         comp.setGridResultProvider(gridResultProvider);
+        comp.setResultReport(report);
         
         Class<SimpleUseCase> useCaseClass = SimpleUseCase.class;
         
@@ -25,11 +34,11 @@ public class ResultComparatorTest {
         
         SimpleObject businessObject = businessObjectClass.newInstance();
         
-        Result r1 = new PrimitiveValue(1);
+        Result r1 = new PrimitiveValueResult(1);
         
-        Result r2 = new PrimitiveValue(2);
+        Result r2 = new PrimitiveValueResult(2);
         
-        Result r3 = new PrimitiveValue(3);
+        Result r3 = new PrimitiveValueResult(3);
         
         comp.compare(r1, useCase, businessObject);
         
@@ -43,6 +52,13 @@ public class ResultComparatorTest {
         comp.compare(r3, useCase, businessObject);
         comp.compare(r3, businessObject, useCase);
         
+        
+        ResultReport resultReport = comp.getReport();
+        
+        List<ReportLine> lines = resultReport.getAllLines();
+        for (ReportLine line : lines) {
+            log.info("{}",line.success());
+        }
     }
  
     static class SimpleUseCase implements UseCase {

@@ -4,9 +4,9 @@ import java.util.Map;
 
 import com.github.btheu.settesting.Result;
 
-public class PrimitiveValue implements Result {
+public class PrimitiveValueResult implements Result {
 
-    public PrimitiveValue(int i) {
+    public PrimitiveValueResult(int i) {
         // TODO Auto-generated constructor stub
     }
 
