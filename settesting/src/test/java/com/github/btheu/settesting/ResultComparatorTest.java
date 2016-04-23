@@ -68,6 +68,16 @@ public class ResultComparatorTest {
     }
     
     static class SimpleObject implements BusinessObject {
+
+        public void create() {
+            // TODO Auto-generated method stub
+            
+        }
+
+        public void remove() {
+            // TODO Auto-generated method stub
+            
+        }
         
     }
     

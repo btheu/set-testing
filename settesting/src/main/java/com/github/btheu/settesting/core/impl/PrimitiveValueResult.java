@@ -4,10 +4,15 @@ import java.util.Map;
 
 import com.github.btheu.settesting.Result;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class PrimitiveValueResult implements Result {
 
-    public PrimitiveValueResult(int i) {
-        // TODO Auto-generated constructor stub
+    private int value;
+
+    public PrimitiveValueResult(int value) {
+        this.value = value;
     }
 
     public Map<String, String> getMetas() {
