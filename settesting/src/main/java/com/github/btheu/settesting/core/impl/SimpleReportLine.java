@@ -2,18 +2,18 @@ package com.github.btheu.settesting.core.impl;
 
 import java.util.Date;
 
-import com.github.btheu.settesting.TestInput;
+import com.github.btheu.settesting.TestCase;
 import com.github.btheu.settesting.core.ReportLine;
 
 public class SimpleReportLine implements ReportLine {
 
     private boolean success;
-    private TestInput[] inputs;
     private Date timestamp = new Date();
+    private TestCase testCase;
     
-    public SimpleReportLine(boolean success, TestInput...inputs) {
+    public SimpleReportLine(boolean success, TestCase testCase) {
         this.success = success;
-        this.inputs = inputs;
+        this.testCase = testCase;
     }
 
     public boolean success() {

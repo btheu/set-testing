@@ -2,9 +2,7 @@ package com.github.btheu.settesting.core.impl;
 
 import com.github.btheu.settesting.Result;
 import com.github.btheu.settesting.ResultComparator;
-import com.github.btheu.settesting.TestInput;
-import com.github.btheu.settesting.UseCase;
-import com.github.btheu.settesting.User;
+import com.github.btheu.settesting.TestCase;
 import com.github.btheu.settesting.core.GridResult;
 import com.github.btheu.settesting.core.GridResultProvider;
 import com.github.btheu.settesting.core.ResultReport;
@@ -33,46 +31,35 @@ public class DefaultResultComparator implements ResultComparator {
         gridResult = gridResultProvider.get();
     }
     
-    public void compare(Result result, TestInput...inputs) {
-
-        Result expected = gridResult.get(inputs);
+    public void compare(Result result, TestCase testCase) {
+        
+        Result expected = gridResult.get(testCase);
         if(expected == null){
-            gridResult.put(result, inputs);
-            resultReport.reportDefault(result, expected, inputs);
+            gridResult.put(result, testCase);
+            resultReport.reportDefault(result, expected, testCase);
         }else{
-            compare(result, expected, inputs);
-        }
-
-    }
-
-    protected void compare(Result result, Result expected, TestInput...inputs) {
-
-        log.info("compare [{}] with [{}]",result, expected);
-
-        if(result == expected){
-            resultReport.reportSucceed(result, expected, inputs);
-        }else{
-            resultReport.reportFailed(result, expected, inputs);
+            compare(result, expected, testCase);
         }
         
     }
 
-    @Deprecated
-    public void printReport() {
-        // TODO Auto-generated method stub
+    protected void compare(Result result, Result expected, TestCase testCase) {
 
-    }
+        log.info("compare [{}] with [{}]",result, expected);
 
-
-    @Deprecated
-    public void compare(User user, UseCase useCase, Result execute) {
-        // TODO Auto-generated method stub
-
+        if(result == expected){
+            resultReport.reportSucceed(result, expected, testCase);
+        }else{
+            resultReport.reportFailed(result, expected, testCase);
+        }
+        
     }
 
     public ResultReport getReport() {
         return resultReport;
     }
+
+
 
 
 }

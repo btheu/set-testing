@@ -4,40 +4,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.github.btheu.settesting.Result;
-import com.github.btheu.settesting.TestInput;
+import com.github.btheu.settesting.TestCase;
 import com.github.btheu.settesting.core.GridResult;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class DefaultGridResult implements GridResult {
 
-    Map<Key, Result> results = new HashMap<Key, Result>();
+    protected Map<TestCase, Result> results = new HashMap<TestCase, Result>();
 
-    public Result get(TestInput... inputs) {
-        return results.get(new Key(inputs));
-
+    public Result get(TestCase testCase) {
+        return results.get(testCase);
     }
 
-    public void put(Result result, TestInput... inputs) {
+    public void put(Result result, TestCase testCase) {
         log.debug("put default result [{}]", result);
 
-        results.put(new Key(inputs), result);
-
+        results.put(testCase, result);
     }
 
-    @Data
-    @EqualsAndHashCode
-    public static class Key {
-
-        private TestInput[] inputs;
-
-        public Key(TestInput[] inputs) {
-            this.inputs = inputs;
-        }
-
-    }
 
 }

@@ -2,12 +2,6 @@ package com.github.btheu.settesting;
 
 public interface ResultComparator {
 
-    @Deprecated
-	void compare(User user, UseCase useCase, Result execute);
-	
-	void compare(Result result, TestInput...inputs);
-
-	@Deprecated
-	void printReport();
-
+    void compare(Result r1, TestCase TestCase);
+    
 }

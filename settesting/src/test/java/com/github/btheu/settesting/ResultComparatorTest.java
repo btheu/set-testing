@@ -7,6 +7,7 @@ import org.junit.Test;
 import com.github.btheu.settesting.core.ReportLine;
 import com.github.btheu.settesting.core.ResultReport;
 import com.github.btheu.settesting.core.impl.DefaultResultComparator;
+import com.github.btheu.settesting.core.impl.DefaultTestCase;
 import com.github.btheu.settesting.core.impl.InMemoryGridResultProvider;
 import com.github.btheu.settesting.core.impl.InMemoryResultReport;
 import com.github.btheu.settesting.core.impl.PrimitiveValueResult;
@@ -40,17 +41,14 @@ public class ResultComparatorTest {
         
         Result r3 = new PrimitiveValueResult(3);
         
-        comp.compare(r1, useCase, businessObject);
-        
-        comp.compare(r1, useCase, businessObject);
-        
-        comp.compare(r2, businessObject, useCase);
-        
-        comp.compare(r2, businessObject, useCase);
+        comp.compare(r1,new DefaultTestCase(useCase, businessObject));
+        comp.compare(r1,new DefaultTestCase(useCase, businessObject));
+        comp.compare(r2,new DefaultTestCase(businessObject, useCase));
+        comp.compare(r2,new DefaultTestCase(businessObject, useCase));
         
         
-        comp.compare(r3, useCase, businessObject);
-        comp.compare(r3, businessObject, useCase);
+        comp.compare(r3,new DefaultTestCase(useCase, businessObject));
+        comp.compare(r3,new DefaultTestCase(businessObject, useCase));
         
         
         ResultReport resultReport = comp.getReport();
