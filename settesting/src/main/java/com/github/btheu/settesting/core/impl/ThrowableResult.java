@@ -6,22 +6,28 @@ import java.util.Map;
 import com.github.btheu.settesting.Result;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(of={"message","throwClass"})
 public class ThrowableResult implements Result {
 
 	private Throwable throwable;
+    private Class<? extends Throwable> throwClass;
+    private String message;
 
 	public ThrowableResult(Throwable throwable) {
 		this.throwable = throwable;
+		throwClass = throwable.getClass();
+		message = throwable.getMessage();
 	}
 
 	public Map<String, String> getMetas() {
 
 		Map<String, String> metas = new HashMap<String, String>();
 
-		metas.put("message", throwable.getMessage());
-		metas.put("class", throwable.getClass().getSimpleName());
+		metas.put("class", throwClass.getSimpleName());
+		metas.put("message", message);
 
 		return metas;
 	}

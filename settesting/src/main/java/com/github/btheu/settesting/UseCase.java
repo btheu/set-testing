@@ -2,6 +2,6 @@ package com.github.btheu.settesting;
 
 public interface UseCase extends TestInput {
 
-	Result execute();
+    Result execute(BusinessObject...businessObjects);
 
 }

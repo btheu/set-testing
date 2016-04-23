@@ -45,7 +45,7 @@ public class DefaultResultComparator implements ResultComparator {
 
     protected void compare(Result result, Result expected, TestCase testCase) {
 
-        log.info("compare [{}] with [{}]",result, expected);
+        log.debug("compare [{}] with [{}]",result, expected);
 
         if(result.equals(expected)){
             resultReport.reportSucceed(result, expected, testCase);

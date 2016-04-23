@@ -24,4 +24,8 @@ public class SimpleReportLine implements ReportLine {
         return timestamp;
     }
 
+    public TestCase getTestCase() {
+        return testCase;
+    }
+
 }
