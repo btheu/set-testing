@@ -6,9 +6,9 @@ import java.util.List;
 import com.github.btheu.settesting.Result;
 import com.github.btheu.settesting.TestCase;
 import com.github.btheu.settesting.core.ReportLine;
-import com.github.btheu.settesting.core.ResultReport;
+import com.github.btheu.settesting.core.Report;
 
-public class InMemoryResultReport implements ResultReport {
+public class InMemoryReport implements Report {
 
 
     List<ReportLine> reportLines = new ArrayList<ReportLine>();

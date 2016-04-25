@@ -5,7 +5,7 @@ import java.util.List;
 import com.github.btheu.settesting.Result;
 import com.github.btheu.settesting.TestCase;
 
-public interface ResultReport {
+public interface Report {
 
     void reportDefault(Result result, Result expected, TestCase testCase);
     

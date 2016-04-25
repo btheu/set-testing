@@ -10,7 +10,7 @@ import com.github.btheu.settesting.core.ReportLine;
 import com.github.btheu.settesting.core.impl.DefaultResultComparator;
 import com.github.btheu.settesting.core.impl.DefaultTestCase;
 import com.github.btheu.settesting.core.impl.InMemoryGridResultProvider;
-import com.github.btheu.settesting.core.impl.InMemoryResultReport;
+import com.github.btheu.settesting.core.impl.InMemoryReport;
 import com.github.btheu.settesting.core.impl.ThrowableResult;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class SetTestingCase {
 
     private DefaultResultComparator comp;
 
-    private InMemoryResultReport report;
+    private InMemoryReport report;
 
 
 
@@ -40,10 +40,10 @@ public class SetTestingCase {
 
         comp = new DefaultResultComparator();
         InMemoryGridResultProvider gridResultProvider = new InMemoryGridResultProvider();
-        report = new InMemoryResultReport();
+        report = new InMemoryReport();
 
         comp.setGridResultProvider(gridResultProvider);
-        comp.setResultReport(report);
+        comp.setReport(report);
     }
 
     @After

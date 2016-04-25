@@ -5,7 +5,7 @@ import com.github.btheu.settesting.ResultComparator;
 import com.github.btheu.settesting.TestCase;
 import com.github.btheu.settesting.core.GridResult;
 import com.github.btheu.settesting.core.GridResultProvider;
-import com.github.btheu.settesting.core.ResultReport;
+import com.github.btheu.settesting.core.Report;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +20,7 @@ public class DefaultResultComparator implements ResultComparator {
     protected GridResult gridResult;
 
     @Setter
-    protected ResultReport resultReport;
+    protected Report report;
     
     
     public DefaultResultComparator() {
@@ -36,7 +36,7 @@ public class DefaultResultComparator implements ResultComparator {
         Result expected = gridResult.get(testCase);
         if(expected == null){
             gridResult.put(result, testCase);
-            resultReport.reportDefault(result, expected, testCase);
+            report.reportDefault(result, expected, testCase);
         }else{
             compare(result, expected, testCase);
         }
@@ -48,15 +48,15 @@ public class DefaultResultComparator implements ResultComparator {
         log.debug("compare [{}] with [{}]",result, expected);
 
         if(result.equals(expected)){
-            resultReport.reportSucceed(result, expected, testCase);
+            report.reportSucceed(result, expected, testCase);
         }else{
-            resultReport.reportFailed(result, expected, testCase);
+            report.reportFailed(result, expected, testCase);
         }
         
     }
 
-    public ResultReport getReport() {
-        return resultReport;
+    public Report getReport() {
+        return report;
     }
 
 
