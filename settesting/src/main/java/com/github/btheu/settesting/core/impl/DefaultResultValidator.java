@@ -1,7 +1,7 @@
 package com.github.btheu.settesting.core.impl;
 
 import com.github.btheu.settesting.Result;
-import com.github.btheu.settesting.ResultComparator;
+import com.github.btheu.settesting.ResultValidator;
 import com.github.btheu.settesting.TestCase;
 import com.github.btheu.settesting.ValidationException;
 import com.github.btheu.settesting.core.GridResult;
@@ -13,7 +13,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class DefaultResultComparator implements ResultComparator {
+public class DefaultResultValidator implements ResultValidator {
 
 	@Getter
 	private GridResultProvider gridResultProvider;
@@ -24,7 +24,7 @@ public class DefaultResultComparator implements ResultComparator {
 	protected Report report;
 
 
-	public DefaultResultComparator() {
+	public DefaultResultValidator() {
 
 	}
 

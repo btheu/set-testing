@@ -1,6 +1,6 @@
 package com.github.btheu.settesting;
 
-public interface ResultComparator {
+public interface ResultValidator {
 
 	/**
 	 * 

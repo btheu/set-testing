@@ -7,7 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 
 import com.github.btheu.settesting.core.ReportLine;
-import com.github.btheu.settesting.core.impl.DefaultResultComparator;
+import com.github.btheu.settesting.core.impl.DefaultResultValidator;
 import com.github.btheu.settesting.core.impl.DefaultTestCase;
 import com.github.btheu.settesting.core.impl.InMemoryGridResultProvider;
 import com.github.btheu.settesting.core.impl.InMemoryReport;
@@ -16,6 +16,7 @@ import com.github.btheu.settesting.core.impl.ThrowableResult;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Deprecated
 public class SetTestingCase {
 
     protected List<Class<? extends Factory>> factories = new ArrayList<Class<? extends Factory>>();
@@ -24,7 +25,7 @@ public class SetTestingCase {
 
     protected List<Class<? extends BusinessObject>> bos = new ArrayList<Class<? extends BusinessObject>>();
 
-    private DefaultResultComparator comp;
+    private DefaultResultValidator validator;
 
     private InMemoryReport report;
 
@@ -38,12 +39,12 @@ public class SetTestingCase {
         usecases.clear();
         bos.clear();
 
-        comp = new DefaultResultComparator();
+        validator = new DefaultResultValidator();
         InMemoryGridResultProvider gridResultProvider = new InMemoryGridResultProvider();
         report = new InMemoryReport();
 
-        comp.setGridResultProvider(gridResultProvider);
-        comp.setReport(report);
+        validator.setGridResultProvider(gridResultProvider);
+        validator.setReport(report);
     }
 
     @After
@@ -64,7 +65,7 @@ public class SetTestingCase {
                 
                 bo.remove();
 
-                comp.compare(result, new DefaultTestCase(usecase,bo));
+                validator.compare(result, new DefaultTestCase(usecase,bo));
                 
             }
         }

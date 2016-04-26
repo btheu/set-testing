@@ -16,7 +16,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.model.InitializationError;
 import org.springframework.util.CollectionUtils;
 
-import com.github.btheu.settesting.core.impl.DefaultResultComparator;
+import com.github.btheu.settesting.core.impl.DefaultResultValidator;
 import com.github.btheu.settesting.core.impl.DefaultTestCase;
 import com.github.btheu.settesting.core.impl.InMemoryGridResultProvider;
 import com.github.btheu.settesting.core.impl.InMemoryReport;
@@ -66,12 +66,12 @@ public class SetTestingRunner extends Suite {
 		this.runners = new ArrayList<Runner>();
 
 
-		final DefaultResultComparator comparator = new DefaultResultComparator();
+		final DefaultResultValidator validator = new DefaultResultValidator();
 		InMemoryGridResultProvider gridResultProvider = new InMemoryGridResultProvider();
 		InMemoryReport report = new InMemoryReport();
 
-		comparator.setGridResultProvider(gridResultProvider);
-		comparator.setReport(report);
+		validator.setGridResultProvider(gridResultProvider);
+		validator.setReport(report);
 
 		int seq = 1;
 
@@ -99,7 +99,7 @@ public class SetTestingRunner extends Suite {
 
 							businessObject.remove();
 							
-							comparator.validate(result, new DefaultTestCase(usecase,businessObject));
+							validator.validate(result, new DefaultTestCase(usecase,businessObject));
 							
 							notifier.fireTestFinished(this.getDescription());
 							
