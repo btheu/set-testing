@@ -26,6 +26,20 @@ public class ResultComparatorTest extends SetTestingCase {
         this.bos.add(ValidObject1.class);
     }
     
+    static class SimpleUseCase2 implements UseCase {
+        
+        public Result execute(BusinessObject...businessObjects) {
+            return new PrimitiveValueResult(1);
+        }
+        
+    }
+    
+    static abstract class EntityBO implements BusinessObject {
+        
+        public abstract Long getId();
+        
+    }
+    
     // Test Classes
     
     static class ValidateUseCase implements UseCase {
@@ -53,19 +67,7 @@ public class ResultComparatorTest extends SetTestingCase {
         
     }
     
-    static class SimpleUseCase2 implements UseCase {
-        
-        public Result execute(BusinessObject...businessObjects) {
-            return new PrimitiveValueResult(1);
-        }
-        
-    }
-    
-    static abstract class EntityBO implements BusinessObject {
-        
-        public abstract Long getId();
-        
-    }
+
     
     static class NewObject1 extends EntityBO {
 

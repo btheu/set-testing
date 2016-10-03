@@ -15,6 +15,12 @@ import com.github.btheu.settesting.core.impl.ThrowableResult;
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 
+ * @author theunissenb
+ * @deprecated use SetTestingRunner
+ *
+ */
 @Slf4j
 @Deprecated
 public class SetTestingCase {
@@ -29,52 +35,48 @@ public class SetTestingCase {
 
     private InMemoryReport report;
 
-
-
-
     @Before
-    public void before(){
+    public void before() {
         log.info("before");
-        factories.clear();
-        usecases.clear();
-        bos.clear();
+        this.factories.clear();
+        this.usecases.clear();
+        this.bos.clear();
 
-        validator = new DefaultResultValidator();
+        this.validator = new DefaultResultValidator();
         InMemoryGridResultProvider gridResultProvider = new InMemoryGridResultProvider();
-        report = new InMemoryReport();
+        this.report = new InMemoryReport();
 
-        validator.setGridResultProvider(gridResultProvider);
-        validator.setReport(report);
+        this.validator.setGridResultProvider(gridResultProvider);
+        this.validator.setReport(this.report);
     }
 
     @After
-    public void after() throws InstantiationException, IllegalAccessException{
+    public void after() throws InstantiationException, IllegalAccessException {
         log.info("after");
 
-        for (Class<? extends UseCase> usecaseClass : usecases) {
-            for (Class<? extends BusinessObject> boClass : bos) {
-
+        for (Class<? extends UseCase> usecaseClass : this.usecases) {
+            for (Class<? extends BusinessObject> boClass : this.bos) {
 
                 UseCase usecase = usecaseClass.newInstance();
 
                 BusinessObject bo = boClass.newInstance();
 
                 bo.create();
-                
-                Result result = execute(usecase, bo);
-                
+
+                Result result = this.execute(usecase, bo);
+
                 bo.remove();
 
-                validator.compare(result, new DefaultTestCase(usecase,bo));
-                
+                this.validator.compare(result, new DefaultTestCase(usecase, bo));
+
             }
         }
 
-        List<ReportLine> lines = report.getAllLines();
+        List<ReportLine> lines = this.report.getAllLines();
         for (ReportLine line : lines) {
-            log.info("{}",line.success());
+            log.info("{}", line.success());
         }
-        
+
     }
 
     private Result execute(UseCase usecase, BusinessObject bo) {

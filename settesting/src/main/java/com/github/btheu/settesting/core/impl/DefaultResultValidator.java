@@ -15,62 +15,59 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DefaultResultValidator implements ResultValidator {
 
-	@Getter
-	private GridResultProvider gridResultProvider;
+    @Getter
+    private GridResultProvider gridResultProvider;
 
-	protected GridResult gridResult;
+    protected GridResult gridResult;
 
-	@Setter
-	protected Report report;
+    @Setter
+    protected Report report;
 
+    public DefaultResultValidator() {
 
-	public DefaultResultValidator() {
+    }
 
-	}
+    public void setGridResultProvider(GridResultProvider gridResultProvider) {
+        this.gridResult = gridResultProvider.get();
+    }
 
-	public void setGridResultProvider(GridResultProvider gridResultProvider) {
-		gridResult = gridResultProvider.get();
-	}
+    public boolean compare(Result result, TestCase testCase) {
 
-	public boolean compare(Result result, TestCase testCase) {
+        Result expected = this.gridResult.get(testCase);
+        if (expected == null) {
+            log.debug("No expectation found. Use result as default expectation.");
+            this.gridResult.put(result, testCase);
+            this.report.reportDefault(result, expected, testCase);
+            return true;
+        } else {
+            try {
+                this.compare(result, expected, testCase);
+                return true;
+            } catch (ValidationException e) {
+                return false;
+            }
+        }
 
-		Result expected = gridResult.get(testCase);
-		if(expected == null){
-			gridResult.put(result, testCase);
-			report.reportDefault(result, expected, testCase);
-			return true;
-		}else{
-			try {
-				compare(result, expected, testCase);
-				return true;
-			} catch (ValidationException e) {
-				return false;
-			}
-		}
+    }
 
-	}
+    protected void compare(Result result, Result expected, TestCase testCase) throws ValidationException {
 
-	protected void compare(Result result, Result expected, TestCase testCase) throws ValidationException {
+        log.debug("compare [{}] with [{}]", result, expected);
 
-		log.debug("compare [{}] with [{}]",result, expected);
+        if (result.equals(expected)) {
+            this.report.reportSucceed(result, expected, testCase);
+        } else {
+            this.report.reportFailed(result, expected, testCase);
+            throw new ValidationException("Expected " + expected + ", got " + result);
+        }
+    }
 
-		if(result.equals(expected)){
-			report.reportSucceed(result, expected, testCase);
-		}else{
-			report.reportFailed(result, expected, testCase);
-			throw new ValidationException("Expected "+expected+ ", got "+result);
-		}
-	}
+    public Report getReport() {
+        return this.report;
+    }
 
-	public Report getReport() {
-		return report;
-	}
-
-	public void validate(Result result, TestCase testCase) throws ValidationException {
-		this.compare(result, testCase);
-	}
-
-
-
+    public void validate(Result result, TestCase testCase) throws ValidationException {
+        this.compare(result, testCase);
+    }
 
 }
