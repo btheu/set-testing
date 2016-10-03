@@ -21,6 +21,7 @@ import com.github.btheu.settesting.core.impl.DefaultTestCase;
 import com.github.btheu.settesting.core.impl.InMemoryGridResultProvider;
 import com.github.btheu.settesting.core.impl.InMemoryReport;
 import com.github.btheu.settesting.core.impl.ThrowableResult;
+import com.github.btheu.settesting.core.impl.VoidFactory;
 
 public class SetTestingRunner extends Suite {
 
@@ -32,13 +33,19 @@ public class SetTestingRunner extends Suite {
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.TYPE)
-	public @interface UseCases{
+	public @interface Factories {
+		Class<? extends Factory>[] value();
+	}
+
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target(ElementType.TYPE)
+	public @interface UseCases {
 		Class<? extends UseCase>[] value();
 	}
 
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target(ElementType.TYPE)
-	public @interface BusinessObjects{
+	public @interface BusinessObjects {
 		Class<? extends BusinessObject>[] value();
 	}
 
@@ -48,23 +55,30 @@ public class SetTestingRunner extends Suite {
 
 	protected List<Class<? extends BusinessObject>> bos = new ArrayList<Class<? extends BusinessObject>>();
 
-
-
 	public SetTestingRunner(Class<?> klass) throws InitializationError {
 		super(klass, NO_RUNNERS);
 
 		this.testClass = klass;
 
-		UseCases annotation = klass.getAnnotation(UseCases.class);
+		Factories aFactories = klass.getAnnotation(Factories.class);
+		if (aFactories != null) {
+			addAll(factories, aFactories.value());
+		} else {
+			factories.add(VoidFactory.class);
+		}
 
-		addAll(usecases,annotation.value());
+		UseCases aUseCases = klass.getAnnotation(UseCases.class);
+		if (aUseCases != null) {
+			addAll(usecases, aUseCases.value());
+		}
 
-		BusinessObjects annotation2 = klass.getAnnotation(BusinessObjects.class);
+		BusinessObjects aBusinessObjects = klass.getAnnotation(BusinessObjects.class);
+		if (aBusinessObjects != null) {
 
-		addAll(bos,annotation2.value());
+			addAll(bos, aBusinessObjects.value());
+		}
 
 		this.runners = new ArrayList<Runner>();
-
 
 		final DefaultResultValidator validator = new DefaultResultValidator();
 		InMemoryGridResultProvider gridResultProvider = new InMemoryGridResultProvider();
@@ -75,64 +89,72 @@ public class SetTestingRunner extends Suite {
 
 		int seq = 1;
 
-		for (final Class<? extends UseCase> usecaseClass : usecases) {
-			for (final Class<? extends BusinessObject> boClass : bos) {
+		for (final Class<? extends Factory> factoryClass : factories) {
 
-				final int runnerId = seq++;
-				
-				this.runners.add(new Runner() {
+			for (final Class<? extends UseCase> usecaseClass : usecases) {
+				for (final Class<? extends BusinessObject> boClass : bos) {
 
-					@Override
-					public void run(RunNotifier notifier) {
+					final int runnerId = seq++;
 
-						try {
+					this.runners.add(new Runner() {
 
-							notifier.fireTestStarted(this.getDescription());
+						@Override
+						public void run(RunNotifier notifier) {
 
-							UseCase usecase = usecaseClass.newInstance();
+							try {
 
-							BusinessObject businessObject = boClass.newInstance();
+								notifier.fireTestStarted(this.getDescription());
 
-							businessObject.create();
+								Factory factory = factoryClass.newInstance();
 
-							Result result = execute(usecase, businessObject);
+								UseCase usecase = usecaseClass.newInstance();
 
-							businessObject.remove();
-							
-							validator.validate(result, new DefaultTestCase(usecase,businessObject));
-							
-							notifier.fireTestFinished(this.getDescription());
-							
-						} catch (InstantiationException e) {
-							notifier.fireTestFailure(new Failure(this.getDescription(),e));
-						} catch (IllegalAccessException e) {
-							notifier.fireTestFailure(new Failure(this.getDescription(),e));
-						} catch (ValidationException e) {
-							notifier.fireTestFailure(new Failure(this.getDescription(),e));
+								factory.inject(usecase);
+
+								BusinessObject businessObject = boClass.newInstance();
+
+								factory.inject(businessObject);
+
+								businessObject.create();
+
+								Result result = execute(usecase, businessObject);
+
+								businessObject.remove();
+
+								validator.validate(result, new DefaultTestCase(usecase, businessObject));
+
+								notifier.fireTestFinished(this.getDescription());
+
+							} catch (InstantiationException e) {
+								notifier.fireTestFailure(new Failure(this.getDescription(), e));
+							} catch (IllegalAccessException e) {
+								notifier.fireTestFailure(new Failure(this.getDescription(), e));
+							} catch (ValidationException e) {
+								notifier.fireTestFailure(new Failure(this.getDescription(), e));
+							}
 						}
-					}
 
-					@Override
-					public Description getDescription() {
-						Description desc = Description.createTestDescription(testClass, usecaseClass.getSimpleName()+" : "+boClass.getSimpleName()+" "+runnerId);
-						return desc ;
-					}
-
-					private Result execute(UseCase usecase, BusinessObject bo) {
-						try {
-							Result result = usecase.execute(bo);
-							return result;
-						} catch (Exception e) {
-							return new ThrowableResult(e);
+						@Override
+						public Description getDescription() {
+							Description desc = Description.createTestDescription(testClass,
+									usecaseClass.getSimpleName() + " : " + boClass.getSimpleName() + " " + runnerId);
+							return desc;
 						}
-					}
 
-				});
+						private Result execute(UseCase usecase, BusinessObject bo) {
+							try {
+								Result result = usecase.execute(bo);
+								return result;
+							} catch (Exception e) {
+								return new ThrowableResult(e);
+							}
+						}
 
+					});
+
+				}
 			}
 		}
-
-
 
 	}
 
@@ -145,7 +167,5 @@ public class SetTestingRunner extends Suite {
 	protected List<Runner> getChildren() {
 		return runners;
 	}
-
-
 
 }
