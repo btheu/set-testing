@@ -11,4 +11,6 @@ public interface Factory extends TestInput {
 
     void inject(Object object);
 
+    <T> T create(Class<T> objectClass);
+
 }
